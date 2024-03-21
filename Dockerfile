@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -17,7 +17,7 @@ ENV PATH "${PATH}:${ANDROID_HOME}/bin"
 
 RUN dpkg --add-architecture i386 && \
     apt-get update -yqq && \
-    apt-get install -y curl expect git libc6:i386 libgcc1:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 openjdk-11-jdk wget unzip vim && \
+    apt-get install -y curl expect git libc6:i386 libgcc1:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 openjdk-17-jdk wget unzip vim npm && \
     apt-get clean
 
 RUN groupadd android && useradd -d /opt/android-sdk-linux -g android android
@@ -34,5 +34,11 @@ RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "build-tools;32.0.
 RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "platform-tools"
 RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "platforms;android-31"
 RUN /opt/android-sdk-linux/cmdline-tools/tools/bin/sdkmanager "system-images;android-31;google_apis;x86_64"
+
+#needs for node
+
+RUN npm i -g n @capacitor/cli graceful-fs yarn
+
+RUN n 20
 
 CMD /opt/tools/entrypoint.sh built-in
